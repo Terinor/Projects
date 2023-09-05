@@ -25,24 +25,12 @@ def rename_file_with_folder_name(file_path):
     os.rename(file_path, new_path)
     return new_path, new_name
 
-def remove_empty_folders(folder_path):
-
-    if not os.path.exists(folder_path):
-        #print(f"Папка {folder_path} не існує.")
-        return
-    
-    if os.path.isfile(folder_path):
-        #print(f"{folder_path} є файлом, а не папкою.")
-        return
-    
-    if not os.listdir(folder_path):
-        os.rmdir(folder_path)
-        #print(f"Папку {folder_path} видалено, так як вона була порожньою.")
-    else:
-        for item in os.listdir(folder_path):
-            item_path = os.path.join(folder_path, item)
-            if os.path.isdir(item_path):
-                remove_empty_folders(item_path)
+def delete_empty_folders(root):
+   for dirpath, dirnames, filenames in os.walk(root, topdown=False):
+      for dirname in dirnames:
+         full_path = os.path.join(dirpath, dirname)
+         if not os.listdir(full_path): 
+            os.rmdir(full_path)
 
 def normalize(s):
     translit_dict = {
@@ -89,12 +77,17 @@ def sort_directory(directory_path, categories):
     normalize_objects_in_directory(directory_path)
       
     for root, folders, files in os.walk(directory_path):
-        if os.path.basename(root) not in categories.keys():   
+        if os.path.basename(root) not in categories.keys():  
+
             for file_name in files:
+                if file_name == "file_list.txt":
+                    continue
                 file_path = os.path.join(root, file_name)
                                                 
                 unknown_extension = True
+
                 file_extension = os.path.splitext(file_name)[1].lower()
+
                 for category, extensions in categories.items():
                     if file_extension in extensions:
                         dest_folder = category
@@ -110,30 +103,22 @@ def sort_directory(directory_path, categories):
                         else:
                             file_path, file_name = rename_file_with_folder_name(file_path)
                             dest_file_path = os.path.join(dest_folder_path, file_name)
-                            # Перевіряємо, чи файл вже існує в папці призначення
                             if os.path.isfile(dest_file_path):
-                                # Отримуємо інформацію про файл, який вже існує
                                 existing_file_stat = os.stat(dest_file_path)
-                                
-                                # Отримуємо інформацію про поточний файл, який ми намагаємося перемістити
                                 current_file_stat = os.stat(file_path)
-                                
-                                # Перевіряємо, чи поточний файл є новішим за існуючий за датою створення
                                 if current_file_stat.st_ctime > existing_file_stat.st_ctime:
-                                    # Якщо поточний файл новіший, то перейменовуємо та переміщаємо його
                                     shutil.move(file_path, dest_file_path)
-                                    
-                                # В іншому випадку, якщо існуючий файл новіший, не робимо нічого
                             else:
-                                # Якщо файлу з такою назвою не існує, просто переміщуємо його
                                 shutil.move(file_path, dest_file_path)
 
                         break
-                    
-                if unknown_extension:
+
+                if file_extension == '.tmp':
+                    os.remove(file_path)    
+                elif unknown_extension:
                     print(f"Unknown file extension: {file_path}")
 
-    remove_empty_folders(directory_path)
+    delete_empty_folders(directory_path)
     create_list_of_files(directory_path)
     
 
@@ -150,10 +135,11 @@ if __name__ == "__main__":
                 'images': ('.jpg', '.png', '.jpeg', '.svg'),
                 'video': ('.avi', '.mp4', '.mov', '.mkv'),
                 'audio': ('.mp3', '.ogg', '.wav', '.amr'),
-                'documents': ('.doc', '.docx', '.docm', '.txt', '.pdf', '.xlsx', '.xls', '.pptx'),
+                'documents': ('.doc', '.docx', '.docm', '.txt', '.pdf', '.pptx'),
                 'archives': ('.zip', '.gz', '.tar', '.rar', '.7z', '.iso'),
                 '3Dmodels': ('.stl'),
                 'apps': ('.exe', '.bin', '.msi'),
+                'database':('.mdb', '.accdb','.xlsm', '.xlsx', '.xls'),
                 'torrents': ('.torrent')
             }
             sort_directory(directory_path, categories)
