@@ -81,6 +81,8 @@ def sort_directory(directory_path, categories):
 
             for file_name in files:
                 if file_name == "file_list.txt":
+                    file_path = os.path.join(root, file_name)
+                    os.remove(file_path)
                     continue
                 file_path = os.path.join(root, file_name)
                                                 
@@ -138,7 +140,7 @@ if __name__ == "__main__":
                 'documents': ('.doc', '.docx', '.docm', '.txt', '.pdf', '.pptx'),
                 'archives': ('.zip', '.gz', '.tar', '.rar', '.7z', '.iso'),
                 '3Dmodels': ('.stl'),
-                'apps': ('.exe', '.bin', '.msi'),
+                'applications': ('.exe', '.bin', '.msi'),
                 'database':('.mdb', '.accdb','.xlsm', '.xlsx', '.xls'),
                 'torrents': ('.torrent')
             }
