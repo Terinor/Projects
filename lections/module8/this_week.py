@@ -37,4 +37,8 @@ def this_week(your_date):
     # Check if the year and week match
     return your_year == current_year and your_week == current_week
 
-
+def is_in_next_7_days(target_date):
+    today = date.today()
+    next_week = today + timedelta(days=7)
+    
+    return today <= target_date <= next_week

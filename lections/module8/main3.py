@@ -7,7 +7,7 @@ def generate_next_7_dates():
 def same_day_and_month(date1, date2):
     return date1.day == date2.day and date1.month == date2.month
 
-def get_birthdays_per_week(users):
+def get_birthdays_next_week(users):
     birthdays_next_week = {}
     dates_list = generate_next_7_dates()
 
@@ -26,22 +26,21 @@ def get_birthdays_per_week(users):
 
     return birthdays_next_week
 
+# Список користувачів
+users = [
+        {"name": "wrong_previous", "birthday": date(2000, 9, 15)},
+        {"name": "saturday", "birthday": date(1995, 9, 23)},
+        {"name": "wedn2esday", "birthday": date(2000, 9, 27)},
+        {"name": "wen2sday", "birthday": date(2000, 9, 21)},
+        {"name": "mondey", "birthday": date(2001, 9, 25)},
+        {"name": "wrong_next", "birthday": date(1988, 10, 21)}
+    ]
 
-if __name__ == "__main__":
-    users = [
-            {
-                "name": "John",
-                "birthday": (date.today() + timedelta(days=1)),
-            },
-            {
-                "name": "Doe",
-                "birthday": (date.today() + timedelta(days=3)),
-            },
-            {"name": "Alice", "birthday": (date.today() + timedelta(days=-3))},
-        ]
 
-    result = get_birthdays_per_week(users)
-    print(result)
-    # Виводимо результат
-    for day_name, names in result.items():
-        print(f"{day_name}: {', '.join(names)}")
+
+# Знаходимо дні народження на наступний тиждень
+birthdays_next_week = get_birthdays_next_week(users)
+
+# Виводимо результат
+for weekday, names in birthdays_next_week.items():
+    print(f"{weekday}: {', '.join(names)}")

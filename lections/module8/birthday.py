@@ -32,17 +32,17 @@ users = [
 birthdays = main.get_birthdays_per_week(users)
 print(birthdays)
 
-users = [
-            {
-                "name": "John",
-                "birthday": (self.today + timedelta(days=1)).date(),
-            },
-            {
-                "name": "Doe",
-                "birthday": (self.today + timedelta(days=3)).date(),
-            },
-            {"name": "Alice", "birthday": (self.today + timedelta(days=-3)).date()},
-        ]
+# users = [
+#             {
+#                 "name": "John",
+#                 "birthday": (self.today + timedelta(days=1)).date(),
+#             },
+#             {
+#                 "name": "Doe",
+#                 "birthday": (self.today + timedelta(days=3)).date(),
+#             },
+#             {"name": "Alice", "birthday": (self.today + timedelta(days=-3)).date()},
+#         ]
 
-birthdays = main.get_birthdays_per_week(users)
-print(birthdays)
+# birthdays = main.get_birthdays_per_week(users)
+# print(birthdays)
